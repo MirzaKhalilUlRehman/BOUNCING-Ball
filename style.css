@@ -8,86 +8,180 @@
     width: 100vw;
     height: 100vh;
     background-color: black;
-
+    overflow: hidden;
 }
 
-.box {
-    width: 100px;
-    height: 100px;
-    background-color: white;
+.ball-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ball {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(200, 200, 200, 1));
     border-radius: 50%;
-    position: relative;
-    animation:
-        bounce1 1.25s cubic-bezier(.42,0,1,1) 0s 1,      
-        bounce2 1.25s cubic-bezier(0,0,.58,1) 1.25s 1,  
-        bounce3 1.25s cubic-bezier(.42,0,1,1) 2.5s 1,    
-        bounce4 1.25s cubic-bezier(0,0,.58,1) 3.75s 1,  
-        bounce5 1.25s cubic-bezier(.42,0,1,1) 5s forwards;
-        transition: box-shadow 0.3s ease-in-out; 
+    position: absolute;
+    box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.5);
+    left: 10%;
+    top: 10%;
+    animation: bouncePath 6s infinite;
 }
 
+.shadow {
+    position: absolute;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+    bottom: 120px;
+    left: 10%;
+    width: 60px;
+    height: 15px;
+    animation: shadowPath 6s infinite;
+}
 
-@keyframes bounce1 {
-
-    /* transform: translate(x-axis, y-axis); */
-    from {
-        transform: translate(-100px, 0px);
+@keyframes bouncePath {
+    /* First bounce - high */
+    0% {
+        left: 10%;
+        top: 10%;
     }
-
-    to {
-        transform: translate(15vw, 86vh);
-        box-shadow:  -10px -10px 10px rgba(255, 255, 255, 0.274);
+    
+    13% {
+        left: 30%;
+        top: calc(100vh - 80px);
+    }
+    
+    14% {
+        left: 32%;
+        top: calc(100vh - 80px);
+    }
+    
+    /* Second bounce - medium */
+    28% {
+        left: 50%;
+        top: 30%;
+    }
+    
+    29% {
+        left: 52%;
+        top: calc(100vh - 80px);
+    }
+    
+    30% {
+        left: 54%;
+        top: calc(100vh - 80px);
+    }
+    
+    /* Third bounce - lower */
+    43% {
+        left: 70%;
+        top: 45%;
+    }
+    
+    44% {
+        left: 72%;
+        top: calc(100vh - 80px);
+    }
+    
+    45% {
+        left: 74%;
+        top: calc(100vh - 80px);
+    }
+    
+    /* Final bounce - very low */
+    57% {
+        left: 85%;
+        top: 65%;
+    }
+    
+    58% {
+        left: 87%;
+        top: calc(100vh - 80px);
+    }
+    
+    /* Rest on ground */
+    100% {
+        left: 87%;
+        top: calc(100vh - 80px);
     }
 }
 
-@keyframes bounce2 {
-    
-    /* transform: translate(x-axis, y-axis); */
-    from {
-        transform: translate(15vw, 86vh);
+@keyframes shadowPath {
+    /* First bounce */
+    0% {
+        opacity: 0;
+        width: 20px;
+        left: 10%;
     }
     
-    to {
-        transform: translate(30vw, 40vh);
-        box-shadow:  -10px 10px 10px rgba(255, 255, 255, 0.274);
-    }
-}
-
-@keyframes bounce3 {
-    
-    /* transform: translate(x-axis, y-axis); */
-    from {
-        transform: translate(30vw, 40vh);
+    13% {
+        opacity: 0.4;
+        width: 70px;
+        left: 25%;
     }
     
-    to {
-        transform: translate(50vw, 86vh);
-        box-shadow:  -10px -10px 10px rgba(255, 255, 255, 0.274);
-    }
-}
-
-@keyframes bounce4 {
-
-    /* transform: translate(x-axis, y-axis); */
-    from {
-        transform: translate(50vw, 86vh);
+    14%, 27.9% {
+        opacity: 0.4;
+        width: 70px;
+        left: 27%;
     }
     
-    to {
-        transform: translate(70vw, 60vh);
-        box-shadow:  -10px 10px 10px rgba(255, 255, 255, 0.274);
-    }
-}
-
-@keyframes bounce5 {
-
-    /* transform: translate(x-axis, y-axis); */
-    from {
-        transform: translate(70vw, 60vh);
+    /* Second bounce */
+    28% {
+        opacity: 0.15;
+        width: 40px;
+        left: 50%;
     }
     
-    to {
-        transform: translate(90vw, 86vh);
-        box-shadow:  -10px -10px 10px rgba(255, 255, 255, 0.274);
+    29% {
+        opacity: 0.35;
+        width: 60px;
+        left: 48%;
+    }
+    
+    30%, 42.9% {
+        opacity: 0.35;
+        width: 60px;
+        left: 50%;
+    }
+    
+    /* Third bounce */
+    43% {
+        opacity: 0.1;
+        width: 30px;
+        left: 70%;
+    }
+    
+    44% {
+        opacity: 0.25;
+        width: 50px;
+        left: 68%;
+    }
+    
+    45%, 56.9% {
+        opacity: 0.25;
+        width: 50px;
+        left: 70%;
+    }
+    
+    /* Final bounce */
+    57% {
+        opacity: 0.05;
+        width: 20px;
+        left: 85%;
+    }
+    
+    58% {
+        opacity: 0.15;
+        width: 40px;
+        left: 84%;
+    }
+    
+    100% {
+        opacity: 0.15;
+        width: 40px;
+        left: 84%;
     }
 }
