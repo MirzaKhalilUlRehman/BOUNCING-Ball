@@ -1,187 +1,73 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    background:#000;
+    overflow:hidden;
 }
 
-.container {
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    overflow: hidden;
+.world{
+    width:100vw;
+    height:100vh;
+    position:relative;
 }
 
-.ball-wrapper {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+/* Ball */
+.ball{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    position:absolute;
+    background:radial-gradient(circle at 30% 30%, #fff, #cfcfcf);
+    animation: ballPhysics 7s infinite;
+    will-change: transform;
 }
 
-.ball {
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(200, 200, 200, 1));
-    border-radius: 50%;
-    position: absolute;
-    box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.5);
-    left: 10%;
-    top: 10%;
-    animation: bouncePath 6s infinite;
+/* Shadow */
+.shadow{
+    width:60px;
+    height:14px;
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%);
+    filter:blur(8px);
+    animation: shadowPhysics 7s infinite;
+    will-change: transform,opacity;
 }
 
-.shadow {
-    position: absolute;
-    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
-    border-radius: 50%;
-    filter: blur(8px);
-    bottom: 120px;
-    left: 10%;
-    width: 60px;
-    height: 15px;
-    animation: shadowPath 6s infinite;
+/* Diagonal gravity + bounce decay + squash */
+@keyframes ballPhysics{
+    0%  {transform:translate(5vw,5vh) scale(1)}
+    
+    18% {transform:translate(28vw,85vh) scale(1.18,.82)}
+    23% {transform:translate(33vw,55vh) scale(.95,1.05)}
+
+    38% {transform:translate(50vw,85vh) scale(1.14,.86)}
+    43% {transform:translate(55vw,65vh) scale(.97,1.03)}
+
+    58% {transform:translate(68vw,85vh) scale(1.1,.9)}
+    63% {transform:translate(72vw,72vh) scale(.98,1.02)}
+
+    76% {transform:translate(80vw,85vh) scale(1.05,.95)}
+    81% {transform:translate(83vw,80vh) scale(.99,1.01)}
+
+    100%{transform:translate(87vw,87vh) scale(1)}
 }
 
-@keyframes bouncePath {
-    /* First bounce - high */
-    0% {
-        left: 10%;
-        top: 10%;
-    }
-    
-    13% {
-        left: 30%;
-        top: calc(100vh - 80px);
-    }
-    
-    14% {
-        left: 32%;
-        top: calc(100vh - 80px);
-    }
-    
-    /* Second bounce - medium */
-    28% {
-        left: 50%;
-        top: 30%;
-    }
-    
-    29% {
-        left: 52%;
-        top: calc(100vh - 80px);
-    }
-    
-    30% {
-        left: 54%;
-        top: calc(100vh - 80px);
-    }
-    
-    /* Third bounce - lower */
-    43% {
-        left: 70%;
-        top: 45%;
-    }
-    
-    44% {
-        left: 72%;
-        top: calc(100vh - 80px);
-    }
-    
-    45% {
-        left: 74%;
-        top: calc(100vh - 80px);
-    }
-    
-    /* Final bounce - very low */
-    57% {
-        left: 85%;
-        top: 65%;
-    }
-    
-    58% {
-        left: 87%;
-        top: calc(100vh - 80px);
-    }
-    
-    /* Rest on ground */
-    100% {
-        left: 87%;
-        top: calc(100vh - 80px);
-    }
-}
+/* Shadow physics */
+@keyframes shadowPhysics{
+    0%  {transform:translate(5vw,87vh) scale(.3);opacity:.05}
 
-@keyframes shadowPath {
-    /* First bounce */
-    0% {
-        opacity: 0;
-        width: 20px;
-        left: 10%;
-    }
-    
-    13% {
-        opacity: 0.4;
-        width: 70px;
-        left: 25%;
-    }
-    
-    14%, 27.9% {
-        opacity: 0.4;
-        width: 70px;
-        left: 27%;
-    }
-    
-    /* Second bounce */
-    28% {
-        opacity: 0.15;
-        width: 40px;
-        left: 50%;
-    }
-    
-    29% {
-        opacity: 0.35;
-        width: 60px;
-        left: 48%;
-    }
-    
-    30%, 42.9% {
-        opacity: 0.35;
-        width: 60px;
-        left: 50%;
-    }
-    
-    /* Third bounce */
-    43% {
-        opacity: 0.1;
-        width: 30px;
-        left: 70%;
-    }
-    
-    44% {
-        opacity: 0.25;
-        width: 50px;
-        left: 68%;
-    }
-    
-    45%, 56.9% {
-        opacity: 0.25;
-        width: 50px;
-        left: 70%;
-    }
-    
-    /* Final bounce */
-    57% {
-        opacity: 0.05;
-        width: 20px;
-        left: 85%;
-    }
-    
-    58% {
-        opacity: 0.15;
-        width: 40px;
-        left: 84%;
-    }
-    
-    100% {
-        opacity: 0.15;
-        width: 40px;
-        left: 84%;
-    }
+    18% {transform:translate(28vw,87vh) scale(1.1);opacity:.45}
+    23% {transform:translate(33vw,87vh) scale(.6);opacity:.2}
+
+    38% {transform:translate(50vw,87vh) scale(1);opacity:.4}
+    43% {transform:translate(55vw,87vh) scale(.65);opacity:.2}
+
+    58% {transform:translate(68vw,87vh) scale(.9);opacity:.35}
+    63% {transform:translate(72vw,87vh) scale(.7);opacity:.22}
+
+    76% {transform:translate(80vw,87vh) scale(.8);opacity:.28}
+    81% {transform:translate(83vw,87vh) scale(.75);opacity:.24}
+
+    100%{transform:translate(87vw,87vh) scale(.7);opacity:.25}
 }
