@@ -1,73 +1,229 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-    background:#000;
+    background: linear-gradient(to bottom, #0c0c2e, #000);
     overflow:hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .world{
-    width:100vw;
-    height:100vh;
+    width:100%;
+    height:100%;
     position:relative;
+    overflow: hidden;
 }
 
-/* Ball */
+/* Ball with more detailed styling */
 .ball{
-    width:42px;
-    height:42px;
-    border-radius:50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     position:absolute;
-    background:radial-gradient(circle at 30% 30%, #fff, #cfcfcf);
-    animation: ballPhysics 7s infinite;
+    background: radial-gradient(circle at 30px 15px, #ffffff, #a3d5ff 40%, #4da6ff 70%, #0066cc);
+    box-shadow: 
+        inset -5px -5px 10px rgba(0, 0, 0, 0.3),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.4),
+        0 0 20px rgba(77, 166, 255, 0.5);
+    animation: ballPhysics 4s infinite cubic-bezier(0.33, 0, 0.67, 1);
     will-change: transform;
+    top: 10%;
+    left: 10%;
+    z-index: 2;
 }
 
-/* Shadow */
+/* Ball highlight for more realism */
+.ball::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    filter: blur(1px);
+}
+
+/* Shadow with more realistic behavior */
 .shadow{
-    width:60px;
-    height:14px;
+    width: 70px;
+    height: 20px;
     position:absolute;
     border-radius:50%;
-    background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%);
-    filter:blur(8px);
-    animation: shadowPhysics 7s infinite;
-    will-change: transform,opacity;
+    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.6), transparent 70%);
+    filter: blur(12px);
+    animation: shadowPhysics 4s infinite cubic-bezier(0.33, 0, 0.67, 1);
+    will-change: transform, opacity;
+    top: 85vh; /* Fixed position relative to floor */
+    left: 10%;
+    z-index: 1;
 }
 
-/* Diagonal gravity + bounce decay + squash */
+/* Fixed floor - stays at the same position */
+.floor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15vh; /* Fixed height in viewport units */
+    background: linear-gradient(to top, #111, #222);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.floor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #4da6ff, transparent);
+}
+
+/* Controls */
+.controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+}
+
+.controls button {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid #4da6ff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.controls button:hover {
+    background: rgba(77, 166, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Fixed bounce physics - all bounces from same floor level */
 @keyframes ballPhysics{
-    0%  {transform:translate(5vw,5vh) scale(1)}
+    0% {
+        transform: translate(0, 0) scaleX(1) scaleY(1);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
     
-    18% {transform:translate(28vw,85vh) scale(1.18,.82)}
-    23% {transform:translate(33vw,55vh) scale(.95,1.05)}
-
-    38% {transform:translate(50vw,85vh) scale(1.14,.86)}
-    43% {transform:translate(55vw,65vh) scale(.97,1.03)}
-
-    58% {transform:translate(68vw,85vh) scale(1.1,.9)}
-    63% {transform:translate(72vw,72vh) scale(.98,1.02)}
-
-    76% {transform:translate(80vw,85vh) scale(1.05,.95)}
-    81% {transform:translate(83vw,80vh) scale(.99,1.01)}
-
-    100%{transform:translate(87vw,87vh) scale(1)}
+    /* First bounce */
+    15% {
+        transform: translate(25vw, calc(85vh - 100px)) scaleX(1.05) scaleY(0.95);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    30% {
+        transform: translate(45vw, 10vh) scaleX(0.98) scaleY(1.02);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    /* Second bounce - from same floor level */
+    45% {
+        transform: translate(60vw, calc(85vh - 80px)) scaleX(1.04) scaleY(0.96);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    60% {
+        transform: translate(70vw, 20vh) scaleX(0.99) scaleY(1.01);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    /* Third bounce - from same floor level */
+    75% {
+        transform: translate(80vw, calc(85vh - 60px)) scaleX(1.02) scaleY(0.98);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    90% {
+        transform: translate(85vw, 30vh) scaleX(1) scaleY(1);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    /* Final landing - on the floor */
+    100% {
+        transform: translate(87vw, calc(85vh - 50px)) scaleX(1) scaleY(1);
+    }
 }
 
-/* Shadow physics */
+/* Shadow physics synchronized with ball - fixed floor position */
 @keyframes shadowPhysics{
-    0%  {transform:translate(5vw,87vh) scale(.3);opacity:.05}
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 0.3;
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    15% {
+        transform: translate(25vw, 0) scale(1.2);
+        opacity: 0.8;
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    30% {
+        transform: translate(45vw, 0) scale(0.6);
+        opacity: 0.4;
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    45% {
+        transform: translate(60vw, 0) scale(1.1);
+        opacity: 0.7;
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    60% {
+        transform: translate(70vw, 0) scale(0.7);
+        opacity: 0.45;
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    75% {
+        transform: translate(80vw, 0) scale(0.9);
+        opacity: 0.6;
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    
+    90% {
+        transform: translate(85vw, 0) scale(0.75);
+        opacity: 0.5;
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    
+    100% {
+        transform: translate(87vw, 0) scale(0.7);
+        opacity: 0.5;
+    }
+}
 
-    18% {transform:translate(28vw,87vh) scale(1.1);opacity:.45}
-    23% {transform:translate(33vw,87vh) scale(.6);opacity:.2}
+/* Animation controls via JS */
+.paused {
+    animation-play-state: paused !important;
+}
 
-    38% {transform:translate(50vw,87vh) scale(1);opacity:.4}
-    43% {transform:translate(55vw,87vh) scale(.65);opacity:.2}
+.slow-motion {
+    animation-duration: 8s !important;
+}
 
-    58% {transform:translate(68vw,87vh) scale(.9);opacity:.35}
-    63% {transform:translate(72vw,87vh) scale(.7);opacity:.22}
-
-    76% {transform:translate(80vw,87vh) scale(.8);opacity:.28}
-    81% {transform:translate(83vw,87vh) scale(.75);opacity:.24}
-
-    100%{transform:translate(87vw,87vh) scale(.7);opacity:.25}
+/* Visual guide for floor level */
+.floor-level {
+    position: absolute;
+    top: 85vh;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 1;
 }
